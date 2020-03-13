@@ -1,0 +1,13 @@
+// Decimos que el entornor con el cual se trabaja es Node "current" = "version actual"
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "targets": {
+          "node": "current"
+        }
+      }
+    ]
+  ]
+}
