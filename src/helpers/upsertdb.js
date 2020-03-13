@@ -4,9 +4,7 @@ import Paises from "../database/models/paises";
 
 export const upsertCasos = async result => {
   try {
-    console.log(result);
-    
-    const casos = await Casos.find();
+    const casos = await Casos.findOne();
     if (casos) {
       await Casos.findOneAndUpdate({}, { $set: result });
     } else {
@@ -29,7 +27,7 @@ export const upsertPaises = async results => {
       } else {
         const newPais = new Paises(result);
         await newPais.save();
-      }      
+      }
     });
     return true;
   } catch (error) {

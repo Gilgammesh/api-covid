@@ -29,7 +29,6 @@ export const getall = setInterval(async () => {
   html(".maincounter-number").filter((i, el) => {
     let count = el.children[0].next.children[0].data || "0";
     count = parseInt(count.replace(/,/g, "") || "0", 10);
-    // El primero es
     if (i === 0) {
       result.casos = count;
     } else if (i === 1) {

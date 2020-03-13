@@ -11,7 +11,6 @@ import "colors";
 import { ApolloServer } from "apollo-server-express";
 import schema from "./graphql/schema";
 import dbconnection from "./database/connection";
-import { getall, getcountries } from "./helpers/scraping";
 
 // Inicializamos las variables de entorno
 dotenv.config();
@@ -49,8 +48,7 @@ app.use("/", (req, res) => {
 dbconnection();
 
 // Ejecutamos nuestras funciones de Scraping
-getall;
-getcountries;
+import { getall } from "./helpers/scraping";
 
 // Creamos servidor HTTP
 const httpServer = createServer(app);
