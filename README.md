@@ -15,7 +15,9 @@ El Sistema de Subastas en Linea es un sistema web, que permite a los usuarios re
 > Libreria Babel para usar las ultimas funcionalidades de ES6.
 
 
-:bowtie: `:bowtie:`
+:bowtie: 
+`:bowtie:` 
+🛒
 
 ## Instalación
 
