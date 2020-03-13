@@ -1,0 +1,17 @@
+type Query {
+  getPais(nombre: String): Pais
+  getPaises: [Pais]
+}
+
+type Pais {
+  _id: ID
+  pais: String
+  paisEs: String
+  casos: Int
+  casosHoy: Int
+  muertes: Int
+  muertesHoy: Int
+  recuperados: Int
+  casosActivos: Int
+  casosCriticos: Int
+}

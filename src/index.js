@@ -20,38 +20,37 @@ dotenv.config();
 const app = express();
 
 // Middlewares
-app.use(json()); // Hace un parse de las application/json
-app.use(urlencoded({ extended: false })); // Decodifica los datos enviados desde un formulario
-app.use(cookieParser()); // Hace un parse de las Cookies en los HTTP request al servidor
-app.use("*", cors()); // Permite acceder a recursos del servidor desde otros dominios (frontend)
-app.use(express.static(join(__dirname, "../public"))); // Establecemos una ruta estática
+app.use(json());
+app.use(urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use("*", cors());
+app.use(express.static(join(__dirname, "../public")));
 
 // Variables generales de la Api
-export const appHost = process.env.APP_COVID_HOST;
-export const appPort = 4000;
-export const appGql = "graphql";
-export const appNombre = "API Coronavirus Info";
-export const appAutor = process.env.APP_AUTOR;
+const appHost = process.env.APP_COVID_HOST || "http://localhost";
+const appPort = 4000;
+const appNombre = "API Coronavirus Info";
+const appAutor = process.env.APP_AUTOR || "SANTANDERTECH";
 
 // Inicializamos servidor de Apollo
 const server = new ApolloServer({
-  schema: schema, // Pasamos el schema de GraphQL al servidor
-  introspection: true, // Habilita instrospeccion de schema
-  playground: true // Habilita el playground de apollo
+  schema: schema,
+  introspection: true,
+  playground: true
 });
 server.applyMiddleware({ app });
 
 // Ruta estática
 app.use("/", (req, res) => {
-  res.redirect("/"); // Redireccionamos cualquier dirección a nuestra ruta estática
+  res.redirect("/");
 });
 
 // Conectamos a la base de datos
-await dbconnection();
+dbconnection();
 
 // Ejecutamos nuestras funciones de Scraping
-await getall();
-await getcountries();
+getall;
+getcountries;
 
 // Creamos servidor HTTP
 const httpServer = createServer(app);
@@ -66,7 +65,7 @@ httpServer.listen(appPort, () => {
   console.log(appNombre.magenta.bold);
   console.log(
     `🚀  ${os.platform().toUpperCase()} Servidor, listo en : `.yellow.bold +
-      `${appHost}:${appPort}/${rutagql}`.white.bold
+      `${appHost}:${appPort}/graphql`.white.bold
   );
   console.log(
     "*********************************************************************************"

@@ -1,0 +1,9 @@
+type Query {
+  getGlobal: Global
+}
+
+type Global {
+  casos: Int
+  muertes: Int
+  recuperado: Int
+}

@@ -2,6 +2,9 @@
 import axios from "axios";
 import cheerio from "cheerio";
 
+// Importamos los helpers para insertar a la base de datos
+import { upsertCasos, upsertPaises } from "./upsertdb";
+
 /********************************************************************************/
 /* Scraping con Cheerio */
 /********************************************************************************/
@@ -35,10 +38,13 @@ export const getall = setInterval(async () => {
       result.recuperados = count;
     }
   });
-  console.log(result);
-  // aca insertamos a la base de datos el resultado;
-  console.log("Casos actualizados", result);
-}, 600000); // cada 10 minutos = 600 segundos = 600000 milisegundos
+  const isUpsert = await upsertCasos(result);
+  if (isUpsert) {
+    console.log("Actualizado los casos globales");
+  } else {
+    console.log("NO se pudo actualizar");
+  }
+}, 4000); // cada 10 minutos = 600 segundos = 600000 milisegundos
 
 // Obtenemos los datos de los paises
 export const getcountries = setInterval(async () => {
@@ -140,12 +146,16 @@ export const getcountries = setInterval(async () => {
     // Obtenemos los críticos
     if (i % totalColumns === criticalColIndex) {
       let critical = cell.children[0].data || "";
-      result[result.length - 1].criticos = parseInt(
+      result[result.length - 1].casosCriticos = parseInt(
         critical.trim().replace(/,/g, "") || "0",
         10
       );
     }
   }
-  // Aca guardamos el result en la base de datos;
-  console.log("Actualizado los casos de los paises", result);
+  const isUpsert = await upsertPaises(result);
+  if (isUpsert) {
+    console.log("Actualizado los casos de los paises");
+  } else {
+    console.log("NO se pudo actualizar");
+  }  
 }, 5000); // cada 1 minuto = 60 segundos = 60000 milisegundos
