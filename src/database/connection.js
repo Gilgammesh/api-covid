@@ -6,7 +6,7 @@ const connection = async () => {
   // Variables de la conexión a la base de datos
   const host = process.env.APP_DB_COVID_HOST || "localhost";
   const port = 27017;
-  const driver = "mongodb";
+  const driver = process.env.APP_DB_COVID_DRIVER || "mongodb";
   const db = process.env.APP_DB_COVID_NAME || "covid";
   const opt = "retryWrites=true&w=majority";
   const user = process.env.APP_DB_COVID_USER || "";
