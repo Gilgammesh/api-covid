@@ -58,7 +58,7 @@ Y usamos el Playground de Apollo para realizar las consultas
 <tr>
 <td> Obtener todos los casos globales </td>
 <td>
-```json
+```javascript
 query {
   getGlobal {
     casos
@@ -69,7 +69,7 @@ query {
 ```
 </td>
 <td>
-```json
+```javascript
 {
   "data": {
     "getGlobal": {
@@ -85,7 +85,7 @@ query {
 <tr>
 <td> Obtener los casos de todos los Paises </td>
 <td>
-```json
+```javascript
 query {
   getPaises(sortby: [{ field: "pais", direction: ASC }]) {
     pais
@@ -101,7 +101,7 @@ query {
 ```
 </td>
 <td>
-```json
+```javascript
 {
   "data": {
     "getPaises": [
@@ -135,7 +135,7 @@ query {
 <tr>
 <td> Obtener los casos de un País </td>
 <td>
-```json
+```javascript
 query {
   getPais(filter: { pais: "Peru" }) {
     pais
@@ -151,7 +151,7 @@ query {
 ```
 </td>
 <td>
-```json
+```javascript
 {
   "data": {
     "getPais": {
