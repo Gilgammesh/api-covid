@@ -87,7 +87,14 @@ query {
 <td>
 <pre>
 query {
-  getPaises(sortby: [{ field: "pais", direction: ASC }]) {
+  getPaises(
+    sortby: [
+      { 
+        field: "pais", 
+        direction: ASC 
+      }
+    ]
+  ) {
     pais
     casos
     casosHoy
@@ -137,7 +144,11 @@ query {
 <td>
 <pre>
 query {
-  getPais(filter: { pais: "Peru" }) {
+  getPais(
+    filter: { 
+      pais: "Peru" 
+    }
+  ) {
     pais
     casos
     casosHoy
