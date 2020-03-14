@@ -49,11 +49,12 @@ http://localhost:4000/graphql
 ## Realizando las consultas
 
 **Ingresamos a http://localhost:4000/graphql**
-Y usamos el Playground de Apollo para realizar las consultas
+
+Usamos el Playground de Apollo para realizar las consultas
 
 <table>
 <tr>
-<td> Descripción </td> <td> Query </td> <td> Respuesta </td>
+<th> Descripción </th> <th> Query </th> <th> Respuesta </th>
 </tr>
 <tr>
 <td> Obtener todos los casos globales </td>
@@ -185,6 +186,7 @@ query {
 ## Producción
 
 **Visitános en nuestra web oficial**
+
 https://covid.santandertech.com
 
 ## Autor
