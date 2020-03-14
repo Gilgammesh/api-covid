@@ -11,7 +11,12 @@ const connection = async () => {
   const opt = "retryWrites=true&w=majority";
   const user = process.env.APP_DB_COVID_USER || "";
   const pass = process.env.APP_DB_COVID_PASS || "";
-  const uri = `${driver}://${host}:${port}/${db}?${opt}`;
+  let uri;
+  if (driver.includes("+srv")) {
+    uri = `${driver}://${host}/${db}?${opt}`;
+  } else {
+    uri = `${driver}://${host}:${port}/${db}?${opt}`;
+  }
 
   // Creamos las opciones
   const options = {
