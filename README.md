@@ -49,49 +49,16 @@ http://localhost:4000/graphql
 ## Realizando las consultas
 
 **Ingresamos a http://localhost:4000/graphql**
-
-+----------------------------------+
-| Descripción                      |  
-+----------------------------------+
-| Obtener todos los casos globales |  
-+----------------------------------+
+Y usamos el Playground de Apollo para realizar las consultas
 
 <table>
 <tr>
-<td> Status </td> <td> Response </td>
+<td> Descripción </td> <td> Query </td> <td> Respuesta </td>
 </tr>
 <tr>
-<td> 200 </td>
+<td> Obtener todos los casos globales </td>
 <td>
-
 ```json
-json
-{
-    "id": 10,
-    "username": "alanpartridge",
-    "email": "alan@alan.com",
-    "password_hash": "$2a$10$uhUIUmVWVnrBWx9rrDWhS.CPCWCZsyqqa8./whhfzBZydX7yvahHS",
-    "password_salt": "$2a$10$uhUIUmVWVnrBWx9rrDWhS.",
-    "created_at": "2015-02-14T20:45:26.433Z",
-    "updated_at": "2015-02-14T20:45:26.540Z"
-}
-```
-
-</td>
-</tr>
-<tr>
-<td> 400 </td>
-<td>
-
-**Markdown** _here_.
-
-</td>
-</tr>
-</table>
-
-Obtener todos los casos globales
-
-```javascript
 query {
   getGlobal {
     casos
@@ -100,12 +67,120 @@ query {
   }
 }
 ```
+</td>
+<td>
+```json
+{
+  "data": {
+    "getGlobal": {
+      "casos": 155812,
+      "muertes": 5814,
+      "recuperados": 74268
+    }
+  }
+}
+```
+</td>
+</tr>
+<tr>
+<td> Obtener los casos de todos los Paises </td>
+<td>
+```json
+query {
+  getPaises(sortby: [{ field: "pais", direction: ASC }]) {
+    pais
+    casos
+    casosHoy
+    muertes
+    muertesHoy
+    recuperados
+    casosActivos
+    casosCriticos
+  }
+}
+```
+</td>
+<td>
+```json
+{
+  "data": {
+    "getPaises": [
+      {
+        "pais": "Afganistán",
+        "casos": 11,
+        "casosHoy": 4,
+        "muertes": 0,
+        "muertesHoy": 0,
+        "recuperados": 0,
+        "casosActivos": 11,
+        "casosCriticos": 0
+      },
+      {
+        "pais": "Albania",
+        "casos": 38,
+        "casosHoy": 5,
+        "muertes": 1,
+        "muertesHoy": 0,
+        "recuperados": 0,
+        "casosActivos": 37,
+        "casosCriticos": 2
+      },
+      ........
+    ]
+  }
+}
+```
+</td>
+</tr>
+<tr>
+<td> Obtener los casos de un País </td>
+<td>
+```json
+query {
+  getPais(filter: { pais: "Peru" }) {
+    pais
+    casos
+    casosHoy
+    muertes
+    muertesHoy
+    recuperados
+    casosActivos
+    casosCriticos
+  }
+}
+```
+</td>
+<td>
+```json
+{
+  "data": {
+    "getPais": {
+      "pais": "Peru",
+      "casos": 38,
+      "casosHoy": 0,
+      "muertes": 0,
+      "muertesHoy": 0,
+      "recuperados": 0,
+      "casosActivos": 38,
+      "casosCriticos": 0
+    }
+  }
+}
+```
+</td>
+</tr>
+</table>
+
+## Producción
+
+** Visitános en nuestra web oficial **
+https://covid.santandertech.com
 
 ## Autor
 
 - Nombre : Carlos Santander
 - Empresa : SANTANDERTECH SAC
 - Correo : santandertechsac@gmail.com
-- Web : http://www.santandertech.com
+- Web : https://www.santandertech.com
 
 ![autor](https://github.com/Gilgammesh/api-covid/blob/master/public/img/autor.jpg)
