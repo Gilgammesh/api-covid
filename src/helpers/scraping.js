@@ -32,7 +32,7 @@ export const getall = setInterval(async () => {
     if (i === 0) {
       result.casos = count;
     } else if (i === 1) {
-      result.muertes = count;
+      result.muertes = count;0.
     } else {
       result.recuperados = count;
     }
@@ -43,7 +43,7 @@ export const getall = setInterval(async () => {
   } else {
     console.log("NO se pudo actualizar");
   }
-}, 4000); // cada 10 minutos = 600 segundos = 600000 milisegundos
+}, 600000); // cada 10 minutos = 600 segundos = 600000 milisegundos
 
 // Obtenemos los datos de los paises
 export const getcountries = setInterval(async () => {
@@ -77,7 +77,7 @@ export const getcountries = setInterval(async () => {
   const todayDeathsColIndex = 4;
   const curedColIndex = 5;
   const activeCasesColIndex = 6;
-  const criticalColIndex = 7;
+  const criticalColIndex = 7;  
 
   // Omitimos la última columna de la tabla que viene a ser el total
   for (let i = 0; i < countriesTableCells.length - totalColumns; i += 1) {
@@ -150,11 +150,11 @@ export const getcountries = setInterval(async () => {
         10
       );
     }
-  }
+  }  
   const isUpsert = await upsertPaises(result);
   if (isUpsert) {
     console.log("Actualizado los casos de los paises");
   } else {
     console.log("NO se pudo actualizar");
   }  
-}, 5000); // cada 1 minuto = 60 segundos = 60000 milisegundos
+}, 60000); // cada 1 minuto = 60 segundos = 60000 milisegundos

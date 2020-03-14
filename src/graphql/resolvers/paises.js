@@ -9,7 +9,7 @@ export default {
         const pais = await Paises.findOne({ paisEs: nombre });
         return pais;
       } catch (error) {
-        console.log(error);
+        console.error(error);
         return null;
       }
     },
@@ -18,7 +18,7 @@ export default {
         const paises = await Paises.find();
         return paises;
       } catch (error) {
-        console.log(error);
+        console.error(error);
         return null;
       }
     }

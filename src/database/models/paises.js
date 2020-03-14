@@ -4,15 +4,18 @@ import { Schema, model } from "mongoose";
 // Creamos el Schema
 const schema = new Schema(
   {
-    pais: String,
-    paisEs: String,
+    pais: String,    
     casos: Number,
     casosHoy: Number,
     muertes: Number,
     muertesHoy: Number,
     recuperados: Number,
     casosActivos: Number,
-    casosCriticos: Number
+    casosCriticos: Number,
+    paisEs: String,
+    bandera: String,
+    latitud: Number,
+    longitud: Number
   },
   {
     collection: "paises",

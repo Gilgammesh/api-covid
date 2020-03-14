@@ -12,6 +12,8 @@ import { ApolloServer } from "apollo-server-express";
 import schema from "./graphql/schema";
 import dbconnection from "./database/connection";
 
+import insertCoord from "./helpers/insertcoord";
+
 // Inicializamos las variables de entorno
 dotenv.config();
 
@@ -48,7 +50,10 @@ app.use("/", (req, res) => {
 dbconnection();
 
 // Ejecutamos nuestras funciones de Scraping
-import { getall } from "./helpers/scraping";
+import "./helpers/scraping";
+
+// Insertamos las coordenadas (única vez)
+//insertCoord();
 
 // Creamos servidor HTTP
 const httpServer = createServer(app);

@@ -1,6 +1,5 @@
 // Importando librerias de mongoose
 import mongoose from "mongoose";
-import "colors";
 
 // Creamos la conexión a la base de datos
 const connection = async () => {
@@ -27,9 +26,9 @@ const connection = async () => {
   // nos conectamos a la BD y pasamos la uri y las opciones
   try {
     await mongoose.connect(uri, options);
-    console.log("Conexión a MongoDb exitosa!!".cyan.bold);
+    console.log("Conexión a MongoDb exitosa!!".blue.bold);
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
