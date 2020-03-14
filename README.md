@@ -58,7 +58,7 @@ Y usamos el Playground de Apollo para realizar las consultas
 <tr>
 <td> Obtener todos los casos globales </td>
 <td>
-```javascript
+<pre>
 query {
   getGlobal {
     casos
@@ -66,7 +66,7 @@ query {
     recuperados
   }
 }
-```
+</pre>
 </td>
 <td>
 ```javascript
@@ -173,7 +173,7 @@ query {
 
 ## Producción
 
-** Visitános en nuestra web oficial **
+**Visitános en nuestra web oficial**
 https://covid.santandertech.com
 
 ## Autor
@@ -183,4 +183,4 @@ https://covid.santandertech.com
 - Correo : santandertechsac@gmail.com
 - Web : https://www.santandertech.com
 
-![autor](https://github.com/Gilgammesh/api-covid/blob/master/public/img/autor.jpg)
+![autor](https://github.com/Gilgammesh/api-covid/blob/master/public/img/autor.png)
