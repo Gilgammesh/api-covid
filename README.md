@@ -43,7 +43,8 @@ $ npm install -D
 $ npm run dev
 ```
 
-**Esto arrancara el proyecto en:**  
+**Esto arrancara el proyecto en:**
+  
 http://localhost:4000/graphql
 
 ## Realizando las consultas
