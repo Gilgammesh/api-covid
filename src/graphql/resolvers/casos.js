@@ -6,7 +6,7 @@ export default {
   Query: {
     getGlobal: async () => {
       try {
-        const global = await Casos.find();
+        const global = await Casos.findOne();
         return global;
       } catch (error) {
         console.error(error);

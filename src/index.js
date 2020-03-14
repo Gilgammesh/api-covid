@@ -11,8 +11,7 @@ import "colors";
 import { ApolloServer } from "apollo-server-express";
 import schema from "./graphql/schema";
 import dbconnection from "./database/connection";
-
-import insertCoord from "./helpers/insertcoord";
+import updateCoord from "./helpers/upcoord";
 
 // Inicializamos las variables de entorno
 dotenv.config();
@@ -53,7 +52,7 @@ dbconnection();
 import "./helpers/scraping";
 
 // Insertamos las coordenadas (única vez)
-//insertCoord();
+updateCoord();
 
 // Creamos servidor HTTP
 const httpServer = createServer(app);

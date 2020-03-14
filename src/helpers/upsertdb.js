@@ -23,14 +23,14 @@ export const upsertCasos = async result => {
 export const upsertPaises = async results => {
   try {
     await results.forEach(async result => {
-      const pais = await Paises.findOne({ pais: result.pais });
+      const pais = await Paises.findOne({ country: result.country });
       if (pais) {
-        await Paises.findOneAndUpdate({ pais: result.pais }, { $set: result });
+        await Paises.findOneAndUpdate({ country: result.country }, { $set: result });
       } else {
         // Convertirmos los nombres de Paises a Español
-        translate(result.pais, { to: "es" })
+        translate(result.country, { to: "es" })
           .then(res => {
-            result.paisEs = res;
+            result.pais = res;
             const newPais = new Paises(result);
             newPais.save();
           })
@@ -49,7 +49,7 @@ export const upsertPaises = async results => {
 export const upsertPaisesCoord = async result => {
   try {
     await Paises.findOneAndUpdate(
-      { pais: result.name },
+      { country: result.name },
       {
         $set: {
           bandera: result.country,

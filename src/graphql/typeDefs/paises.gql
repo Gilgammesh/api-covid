@@ -1,12 +1,12 @@
 type Query {
-  getPais(nombre: String): Pais
-  getPaises: [Pais]
+  getPais(filter: PaisFilter): Pais
+  getPaises(sortby: [SortBy]): [Pais]
 }
 
 type Pais {
   _id: ID
+  country: String
   pais: String
-  paisEs: String
   casos: Int
   casosHoy: Int
   muertes: Int
@@ -17,4 +17,9 @@ type Pais {
   bandera: String
   latitud: Float
   longitud: Float
+}
+
+input PaisFilter {
+  _id: ID
+  pais: String
 }

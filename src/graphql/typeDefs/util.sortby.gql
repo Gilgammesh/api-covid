@@ -1,0 +1,4 @@
+input SortBy {
+  field: String
+  direction: SortDirectionEnum
+}
