@@ -69,7 +69,7 @@ query {
 </pre>
 </td>
 <td>
-```javascript
+<pre>
 {
   "data": {
     "getGlobal": {
@@ -79,13 +79,13 @@ query {
     }
   }
 }
-```
+</pre>
 </td>
 </tr>
 <tr>
 <td> Obtener los casos de todos los Paises </td>
 <td>
-```javascript
+<pre>
 query {
   getPaises(sortby: [{ field: "pais", direction: ASC }]) {
     pais
@@ -98,10 +98,10 @@ query {
     casosCriticos
   }
 }
-```
+</pre>
 </td>
 <td>
-```javascript
+<pre>
 {
   "data": {
     "getPaises": [
@@ -129,13 +129,13 @@ query {
     ]
   }
 }
-```
+</pre>
 </td>
 </tr>
 <tr>
 <td> Obtener los casos de un País </td>
 <td>
-```javascript
+<pre>
 query {
   getPais(filter: { pais: "Peru" }) {
     pais
@@ -148,10 +148,10 @@ query {
     casosCriticos
   }
 }
-```
+</pre>
 </td>
 <td>
-```javascript
+<pre>
 {
   "data": {
     "getPais": {
@@ -166,7 +166,7 @@ query {
     }
   }
 }
-```
+</pre>
 </td>
 </tr>
 </table>
