@@ -4,14 +4,13 @@ import cheerio from "cheerio";
 
 // Importamos los helpers para insertar a la base de datos
 import { upsertCasos, upsertPaises, upsertCiudades } from "./upsertdb";
-import { addSchemaLevelResolveFunction } from "graphql-tools";
 
 /********************************************************************************/
 /* Scraping con Cheerio */
 /********************************************************************************/
 
 // Obtenemos todos los casos
-const getall = setInterval(async () => {
+export const getall = setInterval(async () => {
   let response;
   try {
     response = await axios.get("https://www.worldometers.info/coronavirus/");
@@ -45,10 +44,10 @@ const getall = setInterval(async () => {
   } else {
     console.log("NO se pudo actualizar");
   }
-}, 120000); // cada 2 minutos = 1200 segundos = 120000 milisegundos
+}, 60000); // cada 1 minuto = 60 segundos = 60000 milisegundos
 
 // Obtenemos los datos de los paises
-const getcountries = setInterval(async () => {
+export const getcountries = setInterval(async () => {
   let response;
   try {
     response = await axios.get("https://www.worldometers.info/coronavirus/");
@@ -162,7 +161,7 @@ const getcountries = setInterval(async () => {
 }, 60000); // cada 1 minuto = 60 segundos = 60000 milisegundos
 
 // Obtenemos todos los casos de Perú
-const getPeru = setInterval(async () => {
+export const getPeru = setInterval(async () => {
   let response;
   try {
     response = await axios.get(
@@ -185,9 +184,3 @@ const getPeru = setInterval(async () => {
     console.log("NO se pudo actualizar");
   }
 }, 60000); // cada 1 minuto = 60 segundos = 60000 milisegundos
-
-module.exports = {
-  //getall,
-  //getcountries,
-  getPeru
-};
