@@ -1,0 +1,17 @@
+type Query {
+  getCiudad(filter: CiudadFilter): Ciudad
+  getCiudades(sortby: [SortBy]): [Ciudad]
+}
+
+type Ciudad {
+  _id: ID
+  ciudad: String
+  casos: Int
+  latitud: Float
+  longitud: Float
+}
+
+input CiudadFilter {
+  _id: ID
+  ciudad: String
+}

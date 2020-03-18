@@ -182,6 +182,114 @@ query {
 </pre>
 </td>
 </tr>
+<tr>
+<td> Obtener los casos de todos los Paises </td>
+<td>
+<pre>
+query {
+  getPaises(
+    sortby: [
+      { 
+        field: "pais", 
+        direction: ASC 
+      }
+    ]
+  ) {
+    pais
+    casos
+    casosHoy
+    muertes
+    muertesHoy
+    recuperados
+    casosActivos
+    casosCriticos
+  }
+}
+</pre>
+</td>
+<td>
+<pre>
+{
+  "data": {
+    "getPaises": [
+      {
+        "pais": "Afganistán",
+        "casos": 11,
+        "casosHoy": 4,
+        "muertes": 0,
+        "muertesHoy": 0,
+        "recuperados": 0,
+        "casosActivos": 11,
+        "casosCriticos": 0
+      },
+      {
+        "pais": "Albania",
+        "casos": 38,
+        "casosHoy": 5,
+        "muertes": 1,
+        "muertesHoy": 0,
+        "recuperados": 0,
+        "casosActivos": 37,
+        "casosCriticos": 2
+      },
+      ........
+    ]
+  }
+}
+</pre>
+</td>
+</tr>
+<tr>
+<td> Obtener los casos de las Ciudades de Perú </td>
+<td>
+<pre>
+query {
+  getCiudades(
+    sortby: [
+      { 
+        field: "casos", 
+        direction: DESC 
+      }
+      { 
+        field: "ciudad", 
+        direction: ASC
+      }
+    ]
+  ) {
+    ciudad
+    casos
+  }
+}
+</pre>
+</td>
+<td>
+<pre>
+{
+  "data": {
+    "getCiudades": [
+      {
+        "ciudad": "Lima",
+        "casos": 96
+      },
+      {
+        "ciudad": "Lambayeque",
+        "casos": 6
+      },
+      {
+        "ciudad": "Callao",
+        "casos": 4
+      },
+      {
+        "ciudad": "Arequipa",
+        "casos": 2
+      },
+      ........
+    ]
+  }
+}
+</pre>
+</td>
+</tr>
 </table>
 
 ## Producción

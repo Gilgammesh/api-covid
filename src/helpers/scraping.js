@@ -3,14 +3,15 @@ import axios from "axios";
 import cheerio from "cheerio";
 
 // Importamos los helpers para insertar a la base de datos
-import { upsertCasos, upsertPaises } from "./upsertdb";
+import { upsertCasos, upsertPaises, upsertCiudades } from "./upsertdb";
+import { addSchemaLevelResolveFunction } from "graphql-tools";
 
 /********************************************************************************/
 /* Scraping con Cheerio */
 /********************************************************************************/
 
 // Obtenemos todos los casos
-export const getall = setInterval(async () => {
+const getall = setInterval(async () => {
   let response;
   try {
     response = await axios.get("https://www.worldometers.info/coronavirus/");
@@ -47,7 +48,7 @@ export const getall = setInterval(async () => {
 }, 120000); // cada 2 minutos = 1200 segundos = 120000 milisegundos
 
 // Obtenemos los datos de los paises
-export const getcountries = setInterval(async () => {
+const getcountries = setInterval(async () => {
   let response;
   try {
     response = await axios.get("https://www.worldometers.info/coronavirus/");
@@ -159,3 +160,34 @@ export const getcountries = setInterval(async () => {
     console.log("NO se pudo actualizar");
   }
 }, 60000); // cada 1 minuto = 60 segundos = 60000 milisegundos
+
+// Obtenemos todos los casos de Perú
+const getPeru = setInterval(async () => {
+  let response;
+  try {
+    response = await axios.get(
+      "https://erianvc.github.io/API/COVID-Peru/data/localCases.json"
+    );
+    if (response.status !== 200) {
+      console.log("ERROR");
+    }
+  } catch (err) {
+    console.error(err);
+    return null;
+  }
+  // almacenamos los datos analizados en result
+  const result = response.data.details;
+
+  const isUpsert = await upsertCiudades(result);
+  if (isUpsert) {
+    console.log("Actualizado las ciudades");
+  } else {
+    console.log("NO se pudo actualizar");
+  }
+}, 60000); // cada 1 minuto = 60 segundos = 60000 milisegundos
+
+module.exports = {
+  //getall,
+  //getcountries,
+  getPeru
+};

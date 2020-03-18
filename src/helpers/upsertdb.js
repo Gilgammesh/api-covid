@@ -3,6 +3,7 @@ import translate from "translate-google";
 // Importamos los modelos
 import Casos from "../database/models/casos";
 import Paises from "../database/models/paises";
+import Ciudades from "../database/models/ciudades";
 
 export const upsertCasos = async result => {
   try {
@@ -25,7 +26,10 @@ export const upsertPaises = async results => {
     await results.forEach(async result => {
       const pais = await Paises.findOne({ country: result.country });
       if (pais) {
-        await Paises.findOneAndUpdate({ country: result.country }, { $set: result });
+        await Paises.findOneAndUpdate(
+          { country: result.country },
+          { $set: result }
+        );
       } else {
         // Convertirmos los nombres de Paises a Español
         translate(result.country, { to: "es" })
@@ -58,6 +62,33 @@ export const upsertPaisesCoord = async result => {
         }
       }
     );
+    return true;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+};
+
+export const upsertCiudades = async results => {
+  try {
+    await results.forEach(async result => {
+      const ciudad = await Ciudades.findOne({ ciudad: result.city });
+      const insert = {
+        ciudad: result.city,
+        casos: result.cases,
+        latitud: result.lat,
+        longitud: result.lng
+      };
+      if (ciudad) {
+        await Ciudades.findOneAndUpdate(
+          { ciudad: result.city },
+          { $set: insert }
+        );
+      } else {
+        const newCiudad = new Ciudades(insert);
+        newCiudad.save();
+      }
+    });
     return true;
   } catch (error) {
     console.error(error);
