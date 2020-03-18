@@ -12,6 +12,7 @@ const schema = new Schema(
     recuperados: Number,
     casosActivos: Number,
     casosCriticos: Number,
+    casosDescartados: Number,
     pais: String,
     bandera: String,
     latitud: Number,

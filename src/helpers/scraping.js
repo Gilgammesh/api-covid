@@ -3,7 +3,12 @@ import axios from "axios";
 import cheerio from "cheerio";
 
 // Importamos los helpers para insertar a la base de datos
-import { upsertCasos, upsertPaises, upsertCiudades } from "./upsertdb";
+import {
+  upsertCasos,
+  upsertPais,
+  upsertPaises,
+  upsertCiudades
+} from "./upsertdb";
 
 /********************************************************************************/
 /* Scraping con Cheerio */
@@ -180,6 +185,40 @@ export const getPeru = setInterval(async () => {
   const isUpsert = await upsertCiudades(result);
   if (isUpsert) {
     console.log("Actualizado las ciudades");
+  } else {
+    console.log("NO se pudo actualizar");
+  }
+}, 60000); // cada 1 minuto = 60 segundos = 60000 milisegundos
+
+// Obtenemos los casos descartados de Perú
+export const getDescart = setInterval(async () => {
+  let response;
+  try {
+    response = await axios.get("https://coronavirus.pe/");
+    if (response.status !== 200) {
+      console.log("ERROR");
+    }
+  } catch (err) {
+    console.error(err);
+    return null;
+  }
+
+  // Obtenemos el HTML y analizamos las tasas de mortalidad
+  const html = cheerio.load(response.data);
+  const blockquote = html("blockquote.wp-block-quote");
+  const arrayP = blockquote.children("p");
+  const text = arrayP[0].children[6].data;
+  const arrayText = text.split(":");
+  const descartados = parseInt(arrayText[1].trim(), 10);
+
+  const result = {
+    casosDescartados: descartados
+  };
+  const pais = "Peru";
+
+  const isUpsert = await upsertPais(pais, result);
+  if (isUpsert) {
+    console.log("Actualizado casos descartados Perú");
   } else {
     console.log("NO se pudo actualizar");
   }

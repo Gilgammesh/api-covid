@@ -14,6 +14,7 @@ type Pais {
   recuperados: Int
   casosActivos: Int
   casosCriticos: Int
+  casosDescartados: Int
   bandera: String
   latitud: Float
   longitud: Float

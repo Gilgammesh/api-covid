@@ -21,6 +21,16 @@ export const upsertCasos = async result => {
   }
 };
 
+export const upsertPais = async (pais, result) => {
+  try {
+    await Paises.findOneAndUpdate({ country: pais }, { $set: result });
+    return true;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+};
+
 export const upsertPaises = async results => {
   try {
     await results.forEach(async result => {
