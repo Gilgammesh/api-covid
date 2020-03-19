@@ -4,16 +4,15 @@ import { Schema, model } from "mongoose";
 // Creamos el Schema
 const schema = new Schema(
   {
-    ciudad: String,    
     casos: Number,
-    latitud: Number,
-    longitud: Number
+    muertes: Number,
+    recuperados: Number
   },
   {
-    collection: "ciudades",
+    collection: "global",
     timestamps: true
   }
 );
 
 // Exportamos el modelo y pasamos el schema
-export default model("ciudades", schema);
+export default model("global", schema);

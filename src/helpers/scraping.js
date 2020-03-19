@@ -4,10 +4,10 @@ import cheerio from "cheerio";
 
 // Importamos los helpers para insertar a la base de datos
 import {
-  upsertCasos,
-  upsertPais,
+  upsertGlobal,
   upsertPaises,
-  upsertCiudades
+  upsertPais,
+  upsertRegiones
 } from "./upsertdb";
 
 /********************************************************************************/
@@ -43,7 +43,7 @@ export const getall = setInterval(async () => {
       result.recuperados = count;
     }
   });
-  const isUpsert = await upsertCasos(result);
+  const isUpsert = await upsertGlobal(result);
   if (isUpsert) {
     console.log("Actualizado los casos globales");
   } else {
@@ -197,36 +197,11 @@ export const getcountries = setInterval(async () => {
   }
 }, 60000); // cada 1 minuto = 60 segundos = 60000 milisegundos
 
-// Obtenemos todos los casos de Perú
-export const getPeru = setInterval(async () => {
+// Obtenemos los casos del Perú y Regiones
+export const getRegiones = setInterval(async () => {
   let response;
   try {
-    response = await axios.get(
-      "https://erianvc.github.io/API/COVID-Peru/data/localCases.json"
-    );
-    if (response.status !== 200) {
-      console.log("ERROR");
-    }
-  } catch (err) {
-    console.error(err);
-    return null;
-  }
-  // almacenamos los datos analizados en result
-  const result = response.data.details;
-
-  const isUpsert = await upsertCiudades(result);
-  if (isUpsert) {
-    console.log("Actualizado las ciudades");
-  } else {
-    console.log("NO se pudo actualizar");
-  }
-}, 60000); // cada 1 minuto = 60 segundos = 60000 milisegundos
-
-// Obtenemos los casos descartados de Perú
-export const getDescart = setInterval(async () => {
-  let response;
-  try {
-    response = await axios.get("https://coronavirus.pe/");
+    response = await axios.get("https://www.gob.pe/8662");
     if (response.status !== 200) {
       console.log("ERROR");
     }
@@ -237,20 +212,34 @@ export const getDescart = setInterval(async () => {
 
   // Obtenemos el HTML y analizamos las tasas de mortalidad
   const html = cheerio.load(response.data);
-  const blockquote = html("blockquote.wp-block-quote");
-  const arrayP = blockquote.children("p");
-  const text = arrayP[0].children[6].data;
-  const arrayText = text.split(":");
-  const descartados = parseInt(arrayText[1].trim(), 10);
-
+  const section = html("section");
+  const div = section.children("div");
+  const divPeru = div[1].children[0];
+  const casos = divPeru.children[0].children[1].children[0].data;
+  const descartados = divPeru.children[1].children[1].children[0].data;
   const result = {
+    casos_: casos,
     casosDescartados: descartados
   };
-  const pais = "Peru";
-
-  const isUpsert = await upsertPais(pais, result);
-  if (isUpsert) {
-    console.log("Actualizado casos descartados Perú");
+  const divRegiones = div[1].children[1];
+  // almacenamos los datos analizados en result
+  const results = [];
+  for (let i = 1; i < divRegiones.children.length; i++) {
+    const cadena = divRegiones.children[i].children[0].children[0].data;
+    const array = cadena.split(":");
+    results.push({
+      region: array[0].trim(),
+      casos: parseInt(array[1].trim(), 10)
+    });
+  }
+  const isUpsert1 = await upsertPais("Peru", result);
+  if (isUpsert1) {
+    const isUpsert2 = await upsertRegiones(results);
+    if (isUpsert2) {
+      console.log("Actualizado casos de Perú y regiones");
+    } else {
+      console.log("NO se pudo actualizar");
+    }
   } else {
     console.log("NO se pudo actualizar");
   }

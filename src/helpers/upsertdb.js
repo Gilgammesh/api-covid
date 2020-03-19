@@ -1,18 +1,18 @@
 // Importamos la libreria de Translate de Google
 import translate from "translate-google";
 // Importamos los modelos
-import Casos from "../database/models/casos";
+import Global from "../database/models/global";
 import Paises from "../database/models/paises";
-import Ciudades from "../database/models/ciudades";
+import Regiones from "../database/models/regiones";
 
-export const upsertCasos = async result => {
+export const upsertGlobal = async result => {
   try {
-    const casos = await Casos.findOne();
-    if (casos) {
-      await Casos.findOneAndUpdate({}, { $set: result });
+    const global = await Global.findOne();
+    if (global) {
+      await Global.findOneAndUpdate({}, { $set: result });
     } else {
-      const newCasos = new Casos(result);
-      await newCasos.save();
+      const newGlobal = new Global(result);
+      await newGlobal.save();
     }
     return true;
   } catch (error) {
@@ -79,24 +79,22 @@ export const upsertPaisesCoord = async result => {
   }
 };
 
-export const upsertCiudades = async results => {
+export const upsertRegiones = async results => {
   try {
     await results.forEach(async result => {
-      const ciudad = await Ciudades.findOne({ ciudad: result.city });
+      const region = await Regiones.findOne({ region: result.region });
       const insert = {
-        ciudad: result.city,
-        casos: result.cases,
-        latitud: result.lat,
-        longitud: result.lng
+        region: result.region,
+        casos: result.casos,
       };
-      if (ciudad) {
-        await Ciudades.findOneAndUpdate(
-          { ciudad: result.city },
+      if (region) {
+        await Regiones.findOneAndUpdate(
+          { region: result.region },
           { $set: insert }
         );
       } else {
-        const newCiudad = new Ciudades(insert);
-        newCiudad.save();
+        const newRegion = new Regiones(insert);
+        await newRegion.save();
       }
     });
     return true;

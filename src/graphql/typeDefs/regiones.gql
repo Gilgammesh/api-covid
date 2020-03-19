@@ -1,0 +1,28 @@
+type Query {
+  getRegion(filter: RegionFilter): Region
+  getRegiones(sortby: [SortBy]): [Region]
+}
+
+type Mutation {
+  createRegion(input: RegionInput): Boolean
+}
+
+type Region {
+  _id: ID
+  region: String
+  casos: Int
+  latitud: Float
+  longitud: Float
+}
+
+input RegionFilter {
+  _id: ID
+  region: String
+}
+
+input RegionInput {
+  region: String
+  casos: Int
+  latitud: Float
+  longitud: Float
+}

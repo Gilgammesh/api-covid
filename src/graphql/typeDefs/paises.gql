@@ -8,6 +8,7 @@ type Pais {
   country: String
   pais: String
   casos: Int
+  casos_: Int
   casosHoy: Int
   muertes: Int
   muertesHoy: Int

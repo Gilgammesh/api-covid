@@ -6,6 +6,7 @@ const schema = new Schema(
   {
     country: String,    
     casos: Number,
+    casos_: Number,
     casosHoy: Number,
     muertes: Number,
     muertesHoy: Number,
