@@ -68,7 +68,8 @@ export const getcountries = setInterval(async () => {
 
   // Obtenemos el HTML y analizamos las tasas de mortalidad
   const html = cheerio.load(response.data);
-  const countriesTable = html("table#main_table_countries");
+
+  const countriesTable = html("table#main_table_countries_today");
   const countriesTableCells = countriesTable
     .children("tbody")
     .children("tr")
@@ -91,18 +92,19 @@ export const getcountries = setInterval(async () => {
 
     // Obtenemos País
     if (i % totalColumns === countryColIndex) {
-      let country;
-      if (cell.children[0].data.trim() === "") {
-        country = cell.children[1].children[0].data;
-      } else {
-        country = cell.children[0].data;
-      }
+      let country =
+        cell.children[0].data || cell.children[0].children[0].data || "";
       country = country.trim();
       result.push({ country: country });
     }
     // Obtenemos los casos
     if (i % totalColumns === casesColIndex) {
-      let cases = cell.children[0].data || "";
+      let cases;
+      if (cell.children[0]) {
+        cases = cell.children[0].data || "";
+      } else {
+        cases = "";
+      }
       result[result.length - 1].casos = parseInt(
         cases.trim().replace(/,/g, "") || "0",
         10
@@ -110,7 +112,12 @@ export const getcountries = setInterval(async () => {
     }
     // Obtenemos los casos del día o nuevos casos
     if (i % totalColumns === todayCasesColIndex) {
-      let cases = cell.children[0].data || "";
+      let cases;
+      if (cell.children[0]) {
+        cases = cell.children[0].data || "";
+      } else {
+        cases = "";
+      }
       result[result.length - 1].casosHoy = parseInt(
         cases.trim().replace(/,/g, "") || "0",
         10
@@ -118,7 +125,12 @@ export const getcountries = setInterval(async () => {
     }
     // Obtenemos las muertes
     if (i % totalColumns === deathsColIndex) {
-      let deaths = cell.children[0].data || "";
+      let deaths;
+      if (cell.children[0]) {
+        deaths = cell.children[0].data || "";
+      } else {
+        deaths = "";
+      }
       result[result.length - 1].muertes = parseInt(
         deaths.trim().replace(/,/g, "") || "0",
         10
@@ -126,7 +138,12 @@ export const getcountries = setInterval(async () => {
     }
     // Obtenemos las muertes del día
     if (i % totalColumns === todayDeathsColIndex) {
-      let deaths = cell.children[0].data || "";
+      let deaths;
+      if (cell.children[0]) {
+        deaths = cell.children[0].data || "";
+      } else {
+        deaths = "";
+      }
       result[result.length - 1].muertesHoy = parseInt(
         deaths.trim().replace(/,/g, "") || "0",
         10
@@ -134,7 +151,12 @@ export const getcountries = setInterval(async () => {
     }
     // Obtenemos los recuperados
     if (i % totalColumns === curedColIndex) {
-      let cured = cell.children[0].data || "";
+      let cured;
+      if (cell.children[0]) {
+        cured = cell.children[0].data || "";
+      } else {
+        cured = "";
+      }
       result[result.length - 1].recuperados = parseInt(
         cured.trim().replace(/,/g, "") || 0,
         10
@@ -142,7 +164,12 @@ export const getcountries = setInterval(async () => {
     }
     // Obtenemos los casos activos
     if (i % totalColumns === activeCasesColIndex) {
-      let actives = cell.children[0].data || "";
+      let actives;
+      if (cell.children[0]) {
+        actives = cell.children[0].data || "";
+      } else {
+        actives = "";
+      }
       result[result.length - 1].casosActivos = parseInt(
         actives.trim().replace(/,/g, "") || 0,
         10
@@ -150,7 +177,12 @@ export const getcountries = setInterval(async () => {
     }
     // Obtenemos los críticos
     if (i % totalColumns === criticalColIndex) {
-      let critical = cell.children[0].data || "";
+      let critical;
+      if (cell.children[0]) {
+        critical = cell.children[0].data || "";
+      } else {
+        critical = "";
+      }
       result[result.length - 1].casosCriticos = parseInt(
         critical.trim().replace(/,/g, "") || "0",
         10
@@ -163,7 +195,7 @@ export const getcountries = setInterval(async () => {
   } else {
     console.log("NO se pudo actualizar");
   }
-}, 60000); // cada 1 minuto = 60 segundos = 60000 milisegundos
+}, 5000); // cada 1 minuto = 60 segundos = 60000 milisegundos
 
 // Obtenemos todos los casos de Perú
 export const getPeru = setInterval(async () => {
@@ -222,4 +254,4 @@ export const getDescart = setInterval(async () => {
   } else {
     console.log("NO se pudo actualizar");
   }
-}, 60000); // cada 1 minuto = 60 segundos = 60000 milisegundos
+}, 60000); // cada 1 minuto = 60 segundos = 60000 milisegundos}
