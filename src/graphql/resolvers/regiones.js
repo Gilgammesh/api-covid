@@ -16,7 +16,9 @@ export default {
     },
     getRegiones: async (_, { sortby }) => {
       try {
-        const regiones = await Regiones.find().sort(buildSortFromArg(sortby));
+        const regiones = await Regiones.find({ casos: { $ne: 0 } }).sort(
+          buildSortFromArg(sortby)
+        );
         return regiones;
       } catch (error) {
         console.error(error);
