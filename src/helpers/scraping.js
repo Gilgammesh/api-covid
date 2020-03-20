@@ -282,6 +282,7 @@ export const getPeruMuertes = setInterval(async () => {
   const cadena2 = cadena1[1].split("}};")[0];
   const obj = await JSON.parse(cadena2);
   const regiones = obj.data.data[1];
+  const peru = obj.data.data[2];  
 
   let casosT = 0;
   let muertesT = 0;
@@ -306,8 +307,11 @@ export const getPeruMuertes = setInterval(async () => {
     recuperadosT += recuperados;
   }
 
+  const peruObj = peru[0];
+  const infectados = parseInt(peruObj.infectados, 10);  
+
   const result = {
-    casos_: casosT,
+    casos_: infectados >= casosT ? infectados : casosT,
     muertes_: muertesT,
     recuperados_: recuperadosT
   };
