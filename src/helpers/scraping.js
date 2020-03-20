@@ -223,7 +223,7 @@ export const getRegiones = setInterval(async () => {
   const casos = divPeru.children[0].children[1].children[0].data;
   const descartados = divPeru.children[1].children[1].children[0].data;
   const result = {
-    casos_: casos,
+    //casos_: casos,
     casosDescartados: descartados
   };
 
