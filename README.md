@@ -85,63 +85,6 @@ query {
 </td>
 </tr>
 <tr>
-<td> Obtener los casos de todos los Paises </td>
-<td>
-<pre>
-query {
-  getPaises(
-    sortby: [
-      { 
-        field: "pais", 
-        direction: ASC 
-      }
-    ]
-  ) {
-    pais
-    casos
-    casosHoy
-    muertes
-    muertesHoy
-    recuperados
-    casosActivos
-    casosCriticos
-  }
-}
-</pre>
-</td>
-<td>
-<pre>
-{
-  "data": {
-    "getPaises": [
-      {
-        "pais": "Afganistán",
-        "casos": 11,
-        "casosHoy": 4,
-        "muertes": 0,
-        "muertesHoy": 0,
-        "recuperados": 0,
-        "casosActivos": 11,
-        "casosCriticos": 0
-      },
-      {
-        "pais": "Albania",
-        "casos": 38,
-        "casosHoy": 5,
-        "muertes": 1,
-        "muertesHoy": 0,
-        "recuperados": 0,
-        "casosActivos": 37,
-        "casosCriticos": 2
-      },
-      ........
-    ]
-  }
-}
-</pre>
-</td>
-</tr>
-<tr>
 <td> Obtener los casos de un País </td>
 <td>
 <pre>
@@ -244,20 +187,23 @@ query {
 <td>
 <pre>
 query {
-  getCiudades(
+  getRegiones(
     sortby: [
       { 
         field: "casos", 
-        direction: DESC 
+        direction: ASC 
       }
       { 
-        field: "ciudad", 
-        direction: ASC
+        field: "region", 
+        direction: DESC
       }
     ]
   ) {
-    ciudad
+    _id
+    region
     casos
+    muertes
+    recuperados
   }
 }
 </pre>
@@ -266,22 +212,27 @@ query {
 <pre>
 {
   "data": {
-    "getCiudades": [
+    "getRegiones": [
       {
-        "ciudad": "Lima",
-        "casos": 96
+        "_id": "5e73e8e5038c317d84ca0041",
+        "region": "San Martín",
+        "casos": 1,
+        "muertes": 0,
+        "recuperados": 0
       },
       {
-        "ciudad": "Lambayeque",
-        "casos": 6
+        "_id": "5e73e7f9038c317d84ca003c",
+        "region": "Madre de Dios",
+        "casos": 1,
+        "muertes": 0,
+        "recuperados": 0
       },
       {
-        "ciudad": "Callao",
-        "casos": 4
-      },
-      {
-        "ciudad": "Arequipa",
-        "casos": 2
+        "_id": "5e73e542038c317d84ca0036",
+        "region": "Ica",
+        "casos": 1,
+        "muertes": 0,
+        "recuperados": 0
       },
       ........
     ]

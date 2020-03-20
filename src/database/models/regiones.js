@@ -6,6 +6,8 @@ const schema = new Schema(
   {
     region: String,
     casos: Number,
+    muertes: Number,
+    recuperados: Number,
     latitud: Number,
     longitud: Number
   },

@@ -83,17 +83,13 @@ export const upsertRegiones = async results => {
   try {
     await results.forEach(async result => {
       const region = await Regiones.findOne({ region: result.region });
-      const insert = {
-        region: result.region,
-        casos: result.casos,
-      };
       if (region) {
         await Regiones.findOneAndUpdate(
           { region: result.region },
-          { $set: insert }
+          { $set: result }
         );
       } else {
-        const newRegion = new Regiones(insert);
+        const newRegion = new Regiones(result);
         await newRegion.save();
       }
     });

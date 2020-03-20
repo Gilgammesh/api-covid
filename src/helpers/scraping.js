@@ -17,12 +17,14 @@ import {
 // Obtenemos todos los casos
 export const getall = setInterval(async () => {
   let response;
+  const url = "https://www.worldometers.info/coronavirus/";
   try {
-    response = await axios.get("https://www.worldometers.info/coronavirus/");
+    response = await axios.get(url);
     if (response.status !== 200) {
-      console.log("ERROR");
+      console.error("Error", response.status);
     }
   } catch (err) {
+    console.error("Falló URL ==> " + url);
     return null;
   }
 
@@ -54,12 +56,14 @@ export const getall = setInterval(async () => {
 // Obtenemos los datos de los paises
 export const getcountries = setInterval(async () => {
   let response;
+  const url = "https://www.worldometers.info/coronavirus/";
   try {
-    response = await axios.get("https://www.worldometers.info/coronavirus/");
+    response = await axios.get(url);
     if (response.status !== 200) {
-      console.log("Error", response.status);
+      console.error("Error", response.status);
     }
   } catch (err) {
+    console.error("Falló URL ==> " + url);
     return null;
   }
 
@@ -197,20 +201,21 @@ export const getcountries = setInterval(async () => {
   }
 }, 60000); // cada 1 minuto = 60 segundos = 60000 milisegundos
 
-// Obtenemos los casos del Perú y Regiones
+// Obtenemos los casos del Perú y Regiones (Gobierno)
 export const getRegiones = setInterval(async () => {
   let response;
+  const url = "https://www.gob.pe/8662";
   try {
-    response = await axios.get("https://www.gob.pe/8662");
+    response = await axios.get(url);
     if (response.status !== 200) {
-      console.log("ERROR");
+      console.error("Error", response.status);
     }
   } catch (err) {
-    console.error(err);
+    console.error("Falló URL ==> " + url);
     return null;
   }
 
-  // Obtenemos el HTML y analizamos las tasas de mortalidad
+  // Obtenemos el HTML
   const html = cheerio.load(response.data);
   const section = html("section");
   const div = section.children("div");
@@ -221,26 +226,110 @@ export const getRegiones = setInterval(async () => {
     casos_: casos,
     casosDescartados: descartados
   };
-  const divRegiones = div[1].children[1];
-  // almacenamos los datos analizados en result
-  const results = [];
-  for (let i = 1; i < divRegiones.children.length; i++) {
-    const cadena = divRegiones.children[i].children[0].children[0].data;
-    const array = cadena.split(":");
-    results.push({
-      region: array[0].trim(),
-      casos: parseInt(array[1].trim(), 10)
-    });
-  }
-  const isUpsert1 = await upsertPais("Peru", result);
-  if (isUpsert1) {
-    const isUpsert2 = await upsertRegiones(results);
-    if (isUpsert2) {
-      console.log("Actualizado casos de Perú y regiones");
+
+  if (div[1].children[1]) {
+    const divRegiones = div[1].children[1];
+    // almacenamos los datos analizados en result
+    const results = [];
+    for (let i = 1; i < divRegiones.children.length; i++) {
+      const cadena = divRegiones.children[i].children[0].children[0].data;
+      const array = cadena.split(":");
+      results.push({
+        region: array[0].trim(),
+        casos: parseInt(array[1].trim(), 10)
+      });
+    }
+    const isUpsert1 = await upsertPais("Peru", result);
+    if (isUpsert1) {
+      const isUpsert2 = await upsertRegiones(results);
+      if (isUpsert2) {
+        console.log("Actualizado casos de Perú y regiones (Gobierno)");
+      } else {
+        console.log("NO se pudo actualizar");
+      }
     } else {
       console.log("NO se pudo actualizar");
     }
   } else {
-    console.log("NO se pudo actualizar");
+    const isUpsert1 = await upsertPais("Peru", result);
+    if (isUpsert1) {
+      console.log("Actualizado casos de Perú y regiones (Gobierno)");
+    } else {
+      console.log("NO se pudo actualizar");
+    }
+  }
+}, 60000); // cada 1 minuto = 60 segundos = 60000 milisegundos}
+
+// Obtenemos las muertes en el Perú (La República)
+export const getPeruMuertes = setInterval(async () => {
+  let response;
+  const url = "https://larepublica.pe/coronavirus-en-el-peru/";
+  try {
+    response = await axios.get(url);
+    if (response.status !== 200) {
+      console.error("Error", response.status);
+    }
+  } catch (err) {
+    console.error("Falló URL ==> " + url);
+    return null;
+  }
+
+  // Obtenemos el HTML
+  const html = cheerio.load(response.data, { xmlMode: true });
+  const div = html("body script:not([src])");
+  const cadena = div[8].children[0].data;
+  const cadena1 = cadena.split('{\\"source\\":\\"coronavirus\\"}":');
+  const cadena2 = cadena1[1].split("}};")[0];
+  const obj = await JSON.parse(cadena2);
+  const regiones = obj.data.data[1];
+
+  let casosT = 0;
+  let muertesT = 0;
+  let recuperadosT = 0;
+
+  // almacenamos los datos analizados en result
+  const results = [];
+  for (let i = 0; i < regiones.length; i++) {
+    const regionObj = regiones[i];
+    const region = regionObj.provincia.trim();
+    const casos = parseInt(regionObj.casos_number, 10);
+    const muertes = parseInt(regionObj.fallecidos, 10);
+    const recuperados = parseInt(regionObj.curados, 10);
+    results.push({
+      region: region,
+      casos: region === "Lima" ? casos - 1 : casos,
+      muertes: muertes,
+      recuperados: recuperados
+    });
+    casosT += casos;
+    muertesT += muertes;
+    recuperadosT += recuperados;
+  }
+
+  const result = {
+    casos_: casosT,
+    muertes_: muertesT,
+    recuperados_: recuperadosT
+  };
+
+  if (casosT !== 0 && casosT !== null) {
+    const isUpsert1 = await upsertPais("Peru", result);
+    if (isUpsert1) {
+      const isUpsert2 = await upsertRegiones(results);
+      if (isUpsert2) {
+        console.log("Actualizado casos de Perú y regiones (Republica)");
+      } else {
+        console.log("NO se pudo actualizar");
+      }
+    } else {
+      console.log("NO se pudo actualizar");
+    }
+  } else {
+    const isUpsert2 = await upsertRegiones(results);
+    if (isUpsert2) {
+      console.log("Actualizado casos de Perú y regiones (Republica)");
+    } else {
+      console.log("NO se pudo actualizar");
+    }
   }
 }, 60000); // cada 1 minuto = 60 segundos = 60000 milisegundos}

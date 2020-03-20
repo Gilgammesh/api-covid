@@ -11,8 +11,10 @@ type Pais {
   casos_: Int
   casosHoy: Int
   muertes: Int
+  muertes_: Int
   muertesHoy: Int
   recuperados: Int
+  recuperados_: Int
   casosActivos: Int
   casosCriticos: Int
   casosDescartados: Int

@@ -3,14 +3,12 @@ type Query {
   getRegiones(sortby: [SortBy]): [Region]
 }
 
-type Mutation {
-  createRegion(input: RegionInput): Boolean
-}
-
 type Region {
   _id: ID
   region: String
   casos: Int
+  muertes: Int
+  recuperados: Int
   latitud: Float
   longitud: Float
 }
@@ -18,11 +16,4 @@ type Region {
 input RegionFilter {
   _id: ID
   region: String
-}
-
-input RegionInput {
-  region: String
-  casos: Int
-  latitud: Float
-  longitud: Float
 }
