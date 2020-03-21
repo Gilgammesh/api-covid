@@ -302,7 +302,7 @@ export const getPeruRegionesRep = setInterval(async () => {
     const recuperados = parseInt(regionObj.curados, 10);
     results.push({
       region: region,
-      casos: region === "Lima" ? casos - 1 : casos,
+      casos: casos,
       muertes: muertes,
       recuperados: recuperados
     });
