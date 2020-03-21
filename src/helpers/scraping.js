@@ -2,6 +2,9 @@
 import axios from "axios";
 import cheerio from "cheerio";
 
+// Importamos los modelos
+import Paises from "../database/models/paises";
+
 // Importamos los helpers para insertar a la base de datos
 import {
   upsertGlobal,
@@ -202,7 +205,7 @@ export const getcountries = setInterval(async () => {
 }, 60000); // cada 1 minuto = 60 segundos = 60000 milisegundos
 
 // Obtenemos los casos del Perú y Regiones (Gobierno)
-export const getRegiones = setInterval(async () => {
+export const getPeruRegionesGob = setInterval(async () => {
   let response;
   const url = "https://www.gob.pe/8662";
   try {
@@ -222,8 +225,9 @@ export const getRegiones = setInterval(async () => {
   const divPeru = div[1].children[0];
   const casos = divPeru.children[0].children[1].children[0].data;
   const descartados = divPeru.children[1].children[1].children[0].data;
+  const peru = await Paises.findOne({pais: "Peru"});
   const result = {
-    //casos_: casos,
+    casos_: peru.casos_ >= casos ? peru.casos_ : casos,
     casosDescartados: descartados
   };
 
@@ -260,8 +264,8 @@ export const getRegiones = setInterval(async () => {
   }
 }, 60000); // cada 1 minuto = 60 segundos = 60000 milisegundos}
 
-// Obtenemos las muertes en el Perú (La República)
-export const getPeruMuertes = setInterval(async () => {
+// Obtenemos los casos del Perú y Regiones (La República)
+export const getPeruRegionesRep = setInterval(async () => {
   let response;
   const url = "https://larepublica.pe/coronavirus-en-el-peru/";
   try {
@@ -309,9 +313,13 @@ export const getPeruMuertes = setInterval(async () => {
 
   const peruObj = peru[0];
   const infectados = parseInt(peruObj.infectados, 10);  
+  const casos = infectados >= casosT ? infectados : casosT;
+
+
+  const peru_ = await Paises.findOne({pais: "Peru"});
 
   const result = {
-    casos_: infectados >= casosT ? infectados : casosT,
+    casos_: peru_.casos_ >= casos ? peru_.casos_ : casos,
     muertes_: muertesT,
     recuperados_: recuperadosT
   };
