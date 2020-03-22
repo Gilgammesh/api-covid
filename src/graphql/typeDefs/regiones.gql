@@ -1,6 +1,7 @@
 type Query {
   getRegion(filter: RegionFilter): Region
   getRegiones(sortby: [SortBy]): [Region]
+  getRegiones_(sortby: [SortBy]): [Region]
 }
 
 type Region {
@@ -11,6 +12,7 @@ type Region {
   recuperados: Int
   latitud: Float
   longitud: Float
+  poligono: [[[Float]]]
 }
 
 input RegionFilter {

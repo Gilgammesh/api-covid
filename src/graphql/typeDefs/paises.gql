@@ -21,6 +21,7 @@ type Pais {
   bandera: String
   latitud: Float
   longitud: Float
+  poligono: [[[Float]]]
 }
 
 input PaisFilter {

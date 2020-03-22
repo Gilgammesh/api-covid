@@ -9,7 +9,8 @@ const schema = new Schema(
     muertes: Number,
     recuperados: Number,
     latitud: Number,
-    longitud: Number
+    longitud: Number,
+    poligono: [[[Number, Number]]]
   },
   {
     collection: "regiones",

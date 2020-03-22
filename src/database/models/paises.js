@@ -19,7 +19,8 @@ const schema = new Schema(
     casosDescartados: Number,    
     bandera: String,
     latitud: Number,
-    longitud: Number
+    longitud: Number,
+    poligono: [[[Number, Number]]]
   },
   {
     collection: "paises",
