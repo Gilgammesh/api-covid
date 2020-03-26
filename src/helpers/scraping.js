@@ -36,9 +36,10 @@ export const getall = setInterval(async () => {
 
   // Obtenemos el HTML y analizamos las tasas de mortalidad
   const html = cheerio.load(response.data);
-  html(".maincounter-number").filter((i, el) => {
-    let count = el.children[0].next.children[0].data || "0";
-    count = parseInt(count.replace(/,/g, "") || "0", 10);
+  const maincounter = html("div.maincounter-number span");
+  await maincounter.filter((i, el) => {    
+    let count = el.children[0].data || "0";
+    count = parseInt(count.replace(/,/g, "") || "0", 10);    
     if (i === 0) {
       result.casos = count;
     } else if (i === 1) {
@@ -83,7 +84,7 @@ export const getcountries = setInterval(async () => {
     .children("td");
 
   // Este formato dependera de las columnas de la tabla del sitio web
-  const totalColumns = 9;
+  const totalColumns = 10;
   const countryColIndex = 0;
   const casesColIndex = 1;
   const todayCasesColIndex = 2;
@@ -94,7 +95,7 @@ export const getcountries = setInterval(async () => {
   const criticalColIndex = 7;
 
   // Omitimos la última columna de la tabla que viene a ser el total
-  for (let i = 0; i < countriesTableCells.length - totalColumns; i += 1) {
+  for (let i = 0; i < countriesTableCells.length - totalColumns; i ++) {
     const cell = countriesTableCells[i];
 
     // Obtenemos País
@@ -264,8 +265,8 @@ export const getPeruRegionesGob = setInterval(async () => {
   }
 }, 60000); // cada 1 minuto = 60 segundos = 60000 milisegundos}
 
-// Obtenemos los casos del Perú y Regiones (La República)
-export const getPeruRegionesRep = setInterval(async () => {
+// Obtenemos los casos del Perú (La República)
+export const getPeruRep = setInterval(async () => {
   let response;
   const url = "https://larepublica.pe/coronavirus-en-el-peru/";
   try {
@@ -285,63 +286,75 @@ export const getPeruRegionesRep = setInterval(async () => {
   const cadena1 = cadena.split('{\\"source\\":\\"coronavirus\\"}":');
   const cadena2 = cadena1[1].split("}};")[0];
   const obj = await JSON.parse(cadena2);
-  const regiones = obj.data.data[1];
-  const peru = obj.data.data[2];  
 
-  let casosT = 0;
-  let muertesT = 0;
-  let recuperadosT = 0;
-
-  // almacenamos los datos analizados en result
-  const results = [];
-  for (let i = 0; i < regiones.length; i++) {
-    const regionObj = regiones[i];
-    const region = regionObj.provincia.trim();
-    const casos = parseInt(regionObj.casos_number, 10);
-    const muertes = parseInt(regionObj.fallecidos, 10);
-    const recuperados = parseInt(regionObj.curados, 10);
-    results.push({
-      region: region,
-      casos: casos,
-      muertes: muertes,
-      recuperados: recuperados
-    });
-    casosT += casos;
-    muertesT += muertes;
-    recuperadosT += recuperados;
-  }
+  const peru = obj.data.data[1];
 
   const peruObj = peru[0];
-  const infectados = parseInt(peruObj.infectados, 10);  
-  const casos = infectados >= casosT ? infectados : casosT;
+  const infectados = parseInt(peruObj.infectados, 10);
+  const fallecidos = parseInt(peruObj.fallecidos, 10);
+  const curados = parseInt(peruObj.curados, 10);
+  const casos = infectados;
+  const muertes = fallecidos;
+  const recuperados = curados;
 
-
-  const peru_ = await Paises.findOne({pais: "Peru"});
+  const peru_ = await Paises.findOne({ pais: "Peru" });
 
   const result = {
     casos_: peru_.casos_ >= casos ? peru_.casos_ : casos,
-    muertes_: muertesT,
-    recuperados_: recuperadosT
+    muertes_: peru_.muertes_ >= muertes ? peru_.muertes_ : muertes,
+    recuperados_:
+      peru_.recuperados_ >= recuperados ? peru_.recuperados_ : recuperados
   };
 
-  if (casosT !== 0 && casosT !== null) {
-    const isUpsert1 = await upsertPais("Peru", result);
-    if (isUpsert1) {
-      const isUpsert2 = await upsertRegiones(results);
-      if (isUpsert2) {
-        console.log("Actualizado casos de Perú y regiones (Republica)");
-      } else {
-        console.log("NO se pudo actualizar");
-      }
-    } else {
-      console.log("NO se pudo actualizar");
-    }
+  const isUpsert = await upsertPais("Peru", result);
+  if (isUpsert) {
+    console.log("Actualizado casos de Perú y regiones (Republica)");
   } else {
-    const isUpsert2 = await upsertRegiones(results);
-    if (isUpsert2) {
-      console.log("Actualizado casos de Perú y regiones (Republica)");
-    } else {
-      console.log("NO se pudo actualizar");
+    console.log("NO se pudo actualizar");
+  }
+}, 60000); // cada 1 minuto = 60 segundos = 60000 milisegundos}
+
+// Obtenemos los casos del Perú y Regiones (La República)
+export const getPeruRegionesRep = setInterval(async () => {
+  let response;
+  const url =
+    "https://content-sheets.googleapis.com/v4/spreadsheets/1rwL-7YO32y6Q1HKmpKPVslojSTjD29XhLOmKOPaMA7I/values/A31:E57?access_token=AIzaSyBX7qxcPfD6AFjCbEqvv8R7GLZ9HQ4j3lo&key=AIzaSyBX7qxcPfD6AFjCbEqvv8R7GLZ9HQ4j3lo";
+  try {
+    response = await axios.get(url);
+    if (response.status !== 200) {
+      console.error("Error", response.status);
     }
+  } catch (err) {
+    console.error("Falló URL ==> " + url);
+    return null;
+  }
+
+  const values = response.data.values;
+
+  // almacenamos los datos analizados en results
+  const result = [];
+
+  await values.map((ele, i) => {
+    if (i === 0) {
+      return;
+    }
+    if (i === values.length - 1) {
+      return;
+    }
+    if (ele.length === 0 || ele.length === null) {
+      return;
+    }
+    result.push({
+      region: ele[0].trim(),
+      casos: parseInt(ele[1], 10),
+      muertes: parseInt(ele[2], 10)
+    });
+  });
+
+  const isUpsert = await upsertRegiones(result);
+  if (isUpsert) {
+    console.log("Actualizado casos de Regiones del Perú (Republica)");
+  } else {
+    console.log("NO se pudo actualizar");
   }
 }, 60000); // cada 1 minuto = 60 segundos = 60000 milisegundos}
