@@ -203,7 +203,7 @@ export const getcountries = setInterval(async () => {
   } else {
     console.log("NO se pudo actualizar");
   }
-}, 5000); // cada 1 minuto = 60 segundos = 60000 milisegundos
+}, 60000); // cada 1 minuto = 60 segundos = 60000 milisegundos
 
 // Obtenemos los casos del Perú y Regiones (Gobierno)
 export const getPeruRegionesGob = setInterval(async () => {
