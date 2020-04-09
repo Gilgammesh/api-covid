@@ -84,7 +84,7 @@ export const getcountries = setInterval(async () => {
     .children("td");
 
   // Este formato dependera de las columnas de la tabla del sitio web
-  const totalColumns = 11;
+  const totalColumns = 13;
   const countryColIndex = 0;
   const casesColIndex = 1;
   const todayCasesColIndex = 2;
@@ -95,7 +95,7 @@ export const getcountries = setInterval(async () => {
   const criticalColIndex = 7;
 
   // Omitimos la última columna de la tabla que viene a ser el total
-  for (let i = 0; i < countriesTableCells.length - totalColumns; i ++) {
+  for (let i = totalColumns; i < countriesTableCells.length - totalColumns; i ++) {
     const cell = countriesTableCells[i];
 
     // Obtenemos País
@@ -203,7 +203,7 @@ export const getcountries = setInterval(async () => {
   } else {
     console.log("NO se pudo actualizar");
   }
-}, 60000); // cada 1 minuto = 60 segundos = 60000 milisegundos
+}, 3000); // cada 1 minuto = 60 segundos = 60000 milisegundos
 
 // Obtenemos los casos del Perú y Regiones (Gobierno)
 export const getPeruRegionesGob = setInterval(async () => {
