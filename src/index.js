@@ -10,8 +10,11 @@ import { join } from "path";
 import "colors";
 import { ApolloServer } from "apollo-server-express";
 import schema from "./graphql/schema";
+import { validateToken, generateToken } from "./helpers/token";
 import dbconnection from "./database/connection";
 import updateCoord from "./helpers/upcoord";
+
+import Global from "./database/models/global";
 
 // Inicializamos las variables de entorno
 dotenv.config();
@@ -35,8 +38,16 @@ const appAutor = process.env.APP_AUTOR || "SANTANDERTECH";
 // Inicializamos servidor de Apollo
 const server = new ApolloServer({
   schema: schema,
+  context: async ({ req }) => {
+    const tokenWithBearer = req.headers.authorization || "";
+    const token = tokenWithBearer.split(" ")[1];
+    const decode = await validateToken(token);
+    return {
+      decode,
+    };
+  },
   introspection: true,
-  playground: true
+  playground: true,
 });
 server.applyMiddleware({ app });
 
@@ -58,7 +69,8 @@ updateCoord();
 const httpServer = createServer(app);
 
 // Arrancamos el servidor
-httpServer.listen(appPort, () => {
+const route = "graphql";
+httpServer.listen(appPort, async () => {
   console.log(textSync(appAutor).blue.bold);
   console.log(
     "*********************************************************************************"
@@ -67,10 +79,10 @@ httpServer.listen(appPort, () => {
   console.log(appNombre.magenta.bold);
   console.log(
     `🚀  ${os.platform().toUpperCase()} Servidor, listo en : `.yellow.bold +
-      `${appHost}:${appPort}/graphql`.white.bold
+      `${appHost}:${appPort}/${route}`.white.bold
   );
   console.log(
     "*********************************************************************************"
       .rainbow
-  );
+  ); 
 });

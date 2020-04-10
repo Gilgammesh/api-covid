@@ -5,7 +5,10 @@ import { buildSortFromArg } from "@entria/graphql-mongo-helpers";
 // Creamos los resolvers y exportamos
 export default {
   Query: {
-    getPais: async (_, { filter }) => {
+    getPais: async (_, { filter }, { decode }) => {
+      if (!decode) {
+        throw new Error("Se necesita autorización");
+      }
       try {
         const pais = await Paises.findOne(filter);
         return pais;
@@ -14,7 +17,10 @@ export default {
         return null;
       }
     },
-    getPaises: async (_, { sortby }) => {
+    getPaises: async (_, { sortby }, { decode }) => {
+      if (!decode) {
+        throw new Error("Se necesita autorización");
+      }
       try {
         const paises = await Paises.find().sort(buildSortFromArg(sortby));
         return paises;

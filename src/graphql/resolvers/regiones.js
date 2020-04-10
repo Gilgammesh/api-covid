@@ -5,7 +5,10 @@ import { buildSortFromArg } from "@entria/graphql-mongo-helpers";
 // Creamos los resolvers y exportamos
 export default {
   Query: {
-    getRegion: async (_, { filter }) => {
+    getRegion: async (_, { filter }, { decode }) => {
+      if (!decode) {
+        throw new Error("Se necesita autorización");
+      }
       try {
         const region = await Regiones.findOne(filter);
         return region;
@@ -14,7 +17,10 @@ export default {
         return null;
       }
     },
-    getRegiones: async (_, { sortby }) => {
+    getRegiones: async (_, { sortby }, { decode }) => {
+      if (!decode) {
+        throw new Error("Se necesita autorización");
+      }
       try {
         const regiones = await Regiones.find({ casos: { $gt: 0 } }).sort(
           buildSortFromArg(sortby)
@@ -25,7 +31,10 @@ export default {
         return null;
       }
     },
-    getRegiones_: async (_, { sortby }) => {
+    getRegiones_: async (_, { sortby }, { decode }) => {
+      if (!decode) {
+        throw new Error("Se necesita autorización");
+      }
       try {
         const regiones = await Regiones.find({ casos: { $eq: 0 } }).sort(
           buildSortFromArg(sortby)
@@ -35,6 +44,6 @@ export default {
         console.error(error);
         return null;
       }
-    }
-  }
+    },
+  },
 };
